@@ -5,7 +5,14 @@
       <div class="name">{{ myName }}</div>
       <div class="row">
         <div class="col">
-          <div class="container-image"></div>
+          <div class="container-image">
+            <div class="wrap-current" v-if="currentAyat">
+              <div class="last-read">Terakir dibaca :</div>
+              <div class="current-surah">{{ currentAyat.surah }}</div>
+              <div class="current-ayat">Ayat {{ currentAyat.ayat }}</div>
+              <div class="btn btn-sm button-to-ayat" @click="goToCurrentSurah">Ke ayat <i class="bi-arrow-right ms-1"></i></div>
+            </div>
+          </div>
         </div>
       </div>
       <div class="flex-title">
@@ -39,6 +46,7 @@ export default {
     return {
       dataSurah: [],
       myName: localStorage.getItem('myName'),
+      currentAyat: JSON.parse(localStorage.getItem('currentAyat')),
     };
   },
   mounted() {
@@ -57,9 +65,12 @@ export default {
         this.dataSurah = data;
       });
     },
-    scrollToCurrentAyah(id) {
-      document.getElementById(id).scrollIntoView({
-        behavior: 'smooth',
+    goToCurrentSurah() {
+      let numberSurah = this.currentAyat.numberSurah;
+      let numberAyat = this.currentAyat.ayat;
+      this.$router.push({
+        path: `/ayat/${numberSurah}`,
+        query: { currentAyat: numberAyat },
       });
     },
   },
@@ -82,11 +93,31 @@ export default {
 .container-image {
   width: 100%;
   height: 300px;
+  display: flex;
   margin-top: 20px;
   border-radius: 10px;
+  align-items: center;
   background-size: cover;
   background-position-y: -100px;
   background-image: url('https://www.islampos.com/wp-content/uploads/2019/01/alquran.jpg');
+}
+.wrap-current {
+  margin-left: 30px;
+  color: var(--text-color);
+}
+.current-surah {
+  font-size: 30px;
+  font-weight: 700;
+}
+.current-ayat {
+  font-size: 20px;
+}
+.button-to-ayat {
+  margin-top: 10px;
+  font-weight: 700;
+  border-radius: 10px;
+  color: var(--primary-color);
+  background-color: var(--text-color);
 }
 .flex-title {
   display: flex;
@@ -153,6 +184,15 @@ export default {
     height: 200px;
     background-position-y: 0;
     background-position-x: 10px;
+  }
+  .last-read {
+    font-size: 15px;
+  }
+  .current-surah {
+    font-size: 20px;
+  }
+  .current-ayat {
+    font-size: 16px;
   }
   .title {
     flex: 1;
