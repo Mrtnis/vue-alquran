@@ -16,6 +16,11 @@ const routes = [
     name: 'ayat',
     component: () => import('../views/Ayat.vue'),
   },
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'NotFound',
+    component: () => import('../views/NotFound.vue'),
+  },
 ];
 
 const router = createRouter({
